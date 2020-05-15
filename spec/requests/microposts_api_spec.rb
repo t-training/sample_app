@@ -8,7 +8,7 @@ RSpec.describe "microposts api", type: :request do
     let!(:zeropost_user) { create(:user) }
     let!(:manypost_user) { create(:user) }
     let!(:micropost) { create_list(:user_post,200, user: user) }
-    let!(:many_micropost) { create_list(:user_post,10000, user: manypost_user) }
+    let!(:many_micropost) { create_list(:user_post,100, user: manypost_user) }
     subject(:json) { JSON.parse(response.body) }  
     
     context "投稿があるユーザーの場合" do
@@ -67,15 +67,15 @@ RSpec.describe "microposts api", type: :request do
       end    
       
       it "生成した全てのマイクロポストを取得していること" do
-        expect(json["microposts"].length).to eq(10000)
+        expect(json["microposts"].length).to eq(100)
       end
     end
     
     context "ユーザーIDが存在していない場合" do
       before { get "/api/v1/users/500/microposts" }
       
-      it "リクエストが成功していること" do
-        expect(response.status).to eq(200)
+      it "リクエストが失敗していること" do
+        expect(response.status).to eq(404)
       end
       
       it "エラーメッセージが返ってきていること" do
