@@ -40,6 +40,11 @@ class User < ApplicationRecord
     update_attribute(:remember_digest, User.digest(remember_token)) # digestを適用した結果で記憶ダイジェストを更新
   end
   
+  def access
+    self.access_token = User.new_token  # 新しいトークンを生成
+    update_attribute(:access_digest, User.digest(access_token)) # digestを適用した結果でアクセスダイジェストを更新
+  end
+  
   # トークンがダイジェストと一致したらtrueを返す
   def authenticated?(attribute, token)
     digest = send("#{attribute}_digest")
